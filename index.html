@@ -12,71 +12,64 @@
 	background-color: rgb(0,0,64);
 	box-shadow: 0 0 2px 1px rgba(0,0,255,0), inset 0 0 2px 0px rgba(0,0,255,0);
 }
-
 </style>
 
-<script type="text/javascript">
+<script>
 
 function createBox() {
-	var box=document.createElement("div");
-	var s=box.style;
-	s.width="8px";
-	s.height="8px";
+	var box = document.createElement("div");
+	var s = box.style;
+	s.width = "8px";
+	s.height = "8px";
 	s.margin="4px";
-	s.transition="all 0.5s ease";
-	s.WebkitTransition=s.transition;
-	//s.cssFloat="left";
-	box.className="off";
-	/*box.onmouseover=function() {this.className="off";}
-	box.onmouseout=function() {this.className="on";}*/
+	s.transition = "all 0.5s ease";
+	box.className = "off";
+	/*box.onmouseover = function() {this.className = "off";}
+	box.onmouseout = function() {this.className = "on";}*/
 	return box;
 }
 
 function createBinaryContainer(capacity) {
-	var cont=document.createElement("div");
-	//cont.style.height="192px";
-	//cont.style.border="solid 1px white";
-	cont.style.cssFloat="left";
-	cont.capacity=capacity;
-	cont.val=0;
-	cont.box=[];
-	for (var i=0;i<capacity;i++) {
-		var box=createBox();
+	var cont = document.createElement("div");
+	//cont.style.border = "solid 1px white";
+	cont.style.cssFloat = "left";
+	cont.capacity = capacity;
+	cont.val = 0;
+	cont.box = [];
+	for (var i = 0; i<capacity; i++) {
+		var box = createBox();
 		cont.box.push(box);
 		cont.appendChild(box);
 	}
-	cont.setValue=function(val) {
-		var mask=this.val^val;
-		for (var i=0;i<this.capacity;i++) {
+	cont.setValue = function(val) {
+		var mask = this.val^val;
+		this.val = val;
+		for (var i=0; i<this.capacity; i++) {
 			if (mask & 1)
-				this.box[i].className=this.box[i].className=="on" ? "off" : "on";
-			mask>>=1;
+				this.box[i].className = (val & 1) ? "on" : "off";
+			mask >>= 1;
+			val >>= 1;
 		}
-		this.val=val;
 	}
 	return cont;
 }
 
 var s,m,h;
 function init() {
-	s=createBinaryContainer(6);
+	s = createBinaryContainer(6);
 	document.body.appendChild(s);
 	
-	m=createBinaryContainer(6);
+	m = createBinaryContainer(6);
 	document.body.appendChild(m);
 	
-	h=createBinaryContainer(5);
+	h = createBinaryContainer(5);
 	document.body.appendChild(h);
-	
-	/*setTimeout(function() {//global update
-		s.setValue(new Date().getSeconds());
-	},1000);*/
 	
 	setInterval(function() {
 		s.setValue(new Date().getSeconds());
 		m.setValue(new Date().getMinutes());
 		h.setValue(new Date().getHours());
-	},1000);
+	}, 1000);
 }
 
 </script>
@@ -85,7 +78,6 @@ function init() {
 
 
 <body onload="init();" style="background-color:black;">
-<!--<div style="background-color:blue; width:64px; height:64px; margin:32px; box-shadow: 0 0 24 4 rgba(0,0,255,0.7);"></div>-->
 </body>
 
 </html>
